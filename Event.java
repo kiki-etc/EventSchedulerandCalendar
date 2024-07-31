@@ -29,14 +29,17 @@ public class Event implements Comparable<Event> {
     }
 
     // mutator methods
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
     public void setTitle(String title) {
         this.title = title;
     }
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
     public void togglePriority() {
         highPriority = !highPriority;
+    }
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 
     // overridden methods
@@ -47,7 +50,7 @@ public class Event implements Comparable<Event> {
     @Override
     public String toString() {
         return "Event{" +
-                "dateTime=" + dateTime +
+                "date & time=" + dateTime +
                 ", name='" + title + '\'' +
                 '}';
     }
