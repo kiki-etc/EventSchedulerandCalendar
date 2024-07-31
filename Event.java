@@ -2,13 +2,17 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Event implements Comparable<Event> {
-    private String title, venue, organization;
+    private String title, venue;
+    private final String organization;
     private LocalDateTime dateTime;
     private boolean highPriority;
 
-    public Event(LocalDateTime dateTime, String title) {
+    public Event(LocalDateTime dateTime, String title, String organization) {
         this.dateTime = dateTime;
         this.title = title;
+        this.organization = organization;
+        this.venue = "TBD";
+        this.highPriority = false;
     }
 
     // accessor methods
