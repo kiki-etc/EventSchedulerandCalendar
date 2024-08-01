@@ -9,17 +9,17 @@ public class EventCollection {
         this.events = new HashSet<>();
     }
 
-    // Adds an event to the collection
+    // adds an event to the collection
     public boolean add(Event event) {
         return events.add(event);
     }
 
-    // Removes an event with the specified eventID
+    // removes an event with the specified eventID
     public boolean remove(String eventID) {
         return events.removeIf(event -> event.id().equals(eventID));
     }
 
-    // Modifies an attribute of the specified event
+    // modifies an attribute of the specified event
     public boolean modifyEvent(String eventID, String attribute, Object newValue) {
         for (Event event : events) {
             if (event.id().equals(eventID)) {
@@ -40,15 +40,15 @@ public class EventCollection {
                         event.setPriority((Boolean) newValue);
                         break;
                     default:
-                        return false; // Invalid attribute
+                        return false; // invalid attribute
                 }
-                return true; // Modification successful
+                return true; // modification successful
             }
         }
-        return false; // Event not found
+        return false; // event not found
     }
 
-    // Searches for events based on a specified attribute and value, returns an array of their eventIDs
+    // searches for events based on a specified attribute and value, returns an array of their eventIDs
     public String[] search(String attribute, Object value) {
         return events.stream()
                 .filter(event -> {
