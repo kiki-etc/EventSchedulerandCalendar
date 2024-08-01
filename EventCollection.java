@@ -157,4 +157,9 @@ public class EventCollection {
             }
         }
     }
+
+    // returns the set of events
+    public Set<Event> getEvents() {
+        return events;
+    }
 }
