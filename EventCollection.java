@@ -1,5 +1,8 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class EventCollection {
@@ -17,6 +20,16 @@ public class EventCollection {
     // removes an event with the specified eventID
     public boolean remove(String eventID) {
         return events.removeIf(event -> event.id().equals(eventID));
+    }
+
+    // retrieve an event by its ID
+    public Event getEventByID(String eventID) {
+        for (Event event : events) {
+            if (event.id().equals(eventID)) {
+                return event;
+            }
+        }
+        return null; // event not found
     }
 
     // modifies an attribute of the specified event
@@ -46,6 +59,38 @@ public class EventCollection {
             }
         }
         return false; // event not found
+    }
+
+    // creates a list and returns the sorted list
+    public List<Event> sort(String attribute) {
+        List<Event> sortedEvents = new ArrayList<>(events);
+        Comparator<Event> comparator;
+
+        switch (attribute.toLowerCase()) {
+            case "title":
+                comparator = Comparator.comparing(Event::getTitle);
+                break;
+            case "datetime":
+                comparator = Comparator.comparing(Event::getDateTime);
+                break;
+            case "venue":
+                comparator = Comparator.comparing(Event::getVenue);
+                break;
+            case "description":
+                comparator = Comparator.comparing(Event::getDescription);
+                break;
+            case "priority":
+                comparator = Comparator.comparing(Event::isHighPriority);
+                break;
+            case "organization":
+                comparator = Comparator.comparing(Event::getOrganization);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid attribute: " + attribute);
+        }
+
+        sortedEvents.sort(comparator);
+        return sortedEvents;
     }
 
     // searches for events based on a specified attribute and value, returns an array of their eventIDs
