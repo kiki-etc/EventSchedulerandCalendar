@@ -132,34 +132,4 @@ public class EventCollection {
             }
         }
     }
-
-    // For testing purposes
-    public static void main(String[] args) {
-        EventCollection eventCollection = new EventCollection();
-
-        Event event1 = new Event(LocalDateTime.of(2023, 7, 1, 14, 0), "Annual Meeting", "ABC Corp", "1");
-        Event event2 = new Event(LocalDateTime.of(2023, 8, 1, 9, 0), "Project Kickoff", "XYZ Inc", "2");
-        Event event3 = new Event(LocalDateTime.of(2023, 9, 1, 10, 0), "Team Building", "XYZ Inc", "3");
-
-        eventCollection.add(event1);
-        eventCollection.add(event2);
-        eventCollection.add(event3);
-
-        // Test display
-        eventCollection.view("organization", "XYZ Inc");
-
-        // Test modifyEvent
-        eventCollection.modifyEvent("2", "venue", "Main Conference Room");
-        eventCollection.view("venue", "Main Conference Room");
-
-        // Test search
-        String[] eventIDs = eventCollection.search("title", "Annual Meeting");
-        for (String id : eventIDs) {
-            System.out.println("Found event with ID: " + id);
-        }
-
-        // Test remove
-        eventCollection.remove("1");
-        eventCollection.view("title", "Annual Meeting");
-    }
 }
