@@ -1,8 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EventCollection {
     private Set<Event> events;
