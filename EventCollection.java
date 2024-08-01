@@ -52,44 +52,27 @@ public class EventCollection {
 
     // Searches for events based on a specified attribute and value, returns an array of their eventIDs
     public String[] search(String attribute, Object value) {
-        List<String> matchingEventIDs = new ArrayList<>();
-        for (Event event : events) {
-            switch (attribute.toLowerCase()) {
-                case "title":
-                    if (event.getTitle().equals(value)) {
-                        matchingEventIDs.add(event.id());
+        return events.stream()
+                .filter(event -> {
+                    switch (attribute.toLowerCase()) {
+                        case "title":
+                            return event.getTitle().equals(value);
+                        case "datetime":
+                            return event.getDateTime().equals(value);
+                        case "venue":
+                            return event.getVenue().equals(value);
+                        case "description":
+                            return event.getDescription().equals(value);
+                        case "priority":
+                            return event.isHighPriority() == (boolean) value;
+                        case "organization":
+                            return event.getOrganization().equals(value);
+                        default:
+                            return false;
                     }
-                    break;
-                case "datetime":
-                    if (event.getDateTime().equals(value)) {
-                        matchingEventIDs.add(event.id());
-                    }
-                    break;
-                case "venue":
-                    if (event.getVenue().equals(value)) {
-                        matchingEventIDs.add(event.id());
-                    }
-                    break;
-                case "description":
-                    if (event.getDescription().equals(value)) {
-                        matchingEventIDs.add(event.id());
-                    }
-                    break;
-                case "organization":
-                    if (event.getOrganization().equals(value)) {
-                        matchingEventIDs.add(event.id());
-                    }
-                    break;
-                case "priority":
-                    if (event.isHighPriority() == (Boolean) value) {
-                        matchingEventIDs.add(event.id());
-                    }
-                    break;
-                default:
-                    break; // Invalid attribute
-            }
-        }
-        return matchingEventIDs.toArray(new String[0]);
+                })
+                .map(Event::id)
+                .toArray(String[]::new);
     }
 
     // Displays events based on a specified filter
