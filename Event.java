@@ -165,7 +165,10 @@ public class Event implements Comparable<Event> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return Objects.equals(eventID, event.eventID);
+        return Objects.equals(eventID, event.eventID) ||
+               (Objects.equals(title, event.title) &&
+                Objects.equals(venue, event.venue) &&
+                Objects.equals(organization, event.organization));
     }
 
     /**
