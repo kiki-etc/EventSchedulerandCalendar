@@ -5,9 +5,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class is a collection class for managing a set of events. 
+ * It has methods for adding an event, removing an event, searching for an event,
+ * and viewing events based on various attributes.
+ */
 public class EventCollection {
     private Set<Event> events;
 
+
+    /**
+     * A constructor for an empty set of events
+     */
     public EventCollection() {
         this.events = new HashSet<>();
     }
