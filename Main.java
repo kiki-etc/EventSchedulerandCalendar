@@ -58,11 +58,11 @@ public class Main {
      */
     private static void createEvent(String args) {
         String[] parts = args.split(" ");
-        if (parts.length != 6) {
+        if (parts.length < 6) {
             System.out.println("Usage: create_event <title> <date> <time> <location> <organization> <description>");
             return;
         }
-
+    
         try {
             String title = parts[0];
             LocalDateTime dateTime = LocalDateTime.parse(parts[1] + "T" + parts[2], DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
@@ -73,7 +73,7 @@ public class Main {
             Event event = new Event(dateTime, title, organization, eventID);
             event.setVenue(location);
             event.setDescription(description);
-
+    
             if (eventCollection.add(event)) {
                 System.out.println("Event created successfully.");
             } else {
@@ -82,7 +82,7 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Error creating event: " + e.getMessage());
         }
-    }
+    }    
 
     /**
      * Modifies the event based on user input.
@@ -178,10 +178,14 @@ public class Main {
      * View all events in the collection.
      */
     private static void viewAllEvents() {
-        for (Event event : eventCollection.getEvents()) {
-            event.display();
+        if (eventCollection.getEvents().isEmpty()) {
+            System.out.println("No events found.");
+        } else {
+            for (Event event : eventCollection.getEvents()) {
+                event.display();
+            }
         }
-    }
+    }    
 
     /**
      * Search for events based on a specified attribute and value.
