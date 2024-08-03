@@ -1,9 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Main {
     private static EventCollection eventCollection = new EventCollection();
@@ -13,29 +10,29 @@ public class Main {
         while (true) {
             System.out.println("\nEnter command:");
             String input = scanner.nextLine();
-            String[] command = input.split(" ", 3);
+            String[] command = input.split(" ", 2);
 
             switch (command[0].toLowerCase()) {
                 case "create_event":
-                    createEvent(command);
+                    createEvent(command[1]);
                     break;
                 case "modify_event":
-                    modifyEvent(command);
+                    modifyEvent(command[1]);
                     break;
                 case "delete_event":
-                    deleteEvent(command);
+                    deleteEvent(command[1]);
                     break;
                 case "view_events":
-                    viewEvents(command);
+                    viewEvents(command[1]);
                     break;
                 case "search_event":
-                    searchEvent(command);
+                    searchEvent(command[1]);
                     break;
                 case "sort_events":
-                    sortEvents(command);
+                    sortEvents(command[1]);
                     break;
                 case "generate_summary":
-                    generateSummary(command);
+                    generateSummary(command[1]);
                     break;
                 case "exit":
                     System.out.println("Exiting...");
@@ -46,20 +43,23 @@ public class Main {
         }
     }
 
-    private static void createEvent(String[] command) {
-        if (command.length != 5) {
-            System.out.println("Usage: create_event <title> <date> <time> <location> <description>");
+    private static void createEvent(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 6) {
+            System.out.println("Usage: create_event <title> <date> <time> <location> <organization> <description>");
             return;
         }
 
         try {
-            String title = command[1];
-            LocalDateTime dateTime = LocalDateTime.parse(command[2] + "T" + command[3], DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-            String organization = "Unknown"; // Default or specify how to get this
-            String eventID = generateEventID(); // Implement this method to generate a unique event ID
+            String title = parts[0];
+            LocalDateTime dateTime = LocalDateTime.parse(parts[1] + "T" + parts[2], DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+            String location = parts[3];
+            String organization = parts[4];
+            String description = parts[5];
+            String eventID = generateEventID();
             Event event = new Event(dateTime, title, organization, eventID);
-            event.setVenue(command[4]); // Use this for location
-            event.setDescription(command[5]); // Use this for description
+            event.setVenue(location);
+            event.setDescription(description);
 
             if (eventCollection.add(event)) {
                 System.out.println("Event created successfully.");
@@ -71,31 +71,43 @@ public class Main {
         }
     }
 
-    private static void modifyEvent(String[] command) {
-        if (command.length != 3) {
+    private static void modifyEvent(String args) {
+        String[] parts = args.split(" ", 3);
+        if (parts.length != 3) {
             System.out.println("Usage: modify_event <event_id> <attribute> <new_value>");
             return;
         }
 
-        String eventID = command[1];
-        String attribute = command[2];
-        String newValue = command[3];
+        String eventID = parts[0];
+        String attribute = parts[1];
+        String newValue = parts[2];
 
-        boolean result = eventCollection.modifyEvent(eventID, attribute, newValue);
-        if (result) {
-            System.out.println("Event modified successfully.");
-        } else {
-            System.out.println("Failed to modify event. Check the event ID or attribute.");
+        try {
+            Object value;
+            switch (attribute.toLowerCase()) {
+                case "datetime":
+                    value = LocalDateTime.parse(newValue, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                    break;
+                case "priority":
+                    value = Boolean.parseBoolean(newValue);
+                    break;
+                default:
+                    value = newValue;
+                    break;
+            }
+
+            boolean result = eventCollection.modifyEvent(eventID, attribute, value);
+            if (result) {
+                System.out.println("Event modified successfully.");
+            } else {
+                System.out.println("Failed to modify event. Check the event ID or attribute.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error modifying event: " + e.getMessage());
         }
     }
 
-    private static void deleteEvent(String[] command) {
-        if (command.length != 2) {
-            System.out.println("Usage: delete_event <event_id>");
-            return;
-        }
-
-        String eventID = command[1];
+    private static void deleteEvent(String eventID) {
         boolean result = eventCollection.remove(eventID);
         if (result) {
             System.out.println("Event deleted successfully.");
@@ -104,13 +116,7 @@ public class Main {
         }
     }
 
-    private static void viewEvents(String[] command) {
-        if (command.length != 2) {
-            System.out.println("Usage: view_events <filter>");
-            return;
-        }
-
-        String filter = command[1];
+    private static void viewEvents(String filter) {
         switch (filter.toLowerCase()) {
             case "today":
                 LocalDateTime now = LocalDateTime.now();
@@ -129,14 +135,15 @@ public class Main {
         }
     }
 
-    private static void searchEvent(String[] command) {
-        if (command.length != 3) {
+    private static void searchEvent(String args) {
+        String[] parts = args.split(" ", 2);
+        if (parts.length != 2) {
             System.out.println("Usage: search_event <attribute> <value>");
             return;
         }
 
-        String attribute = command[1];
-        String value = command[2];
+        String attribute = parts[0];
+        String value = parts[1];
 
         String[] eventIDs = eventCollection.search(attribute, value);
         if (eventIDs.length > 0) {
@@ -152,13 +159,7 @@ public class Main {
         }
     }
 
-    private static void sortEvents(String[] command) {
-        if (command.length != 2) {
-            System.out.println("Usage: sort_events <attribute>");
-            return;
-        }
-
-        String attribute = command[1];
+    private static void sortEvents(String attribute) {
         List<Event> sortedEvents = eventCollection.sort(attribute);
         System.out.println("Sorted events:");
         for (Event event : sortedEvents) {
@@ -166,15 +167,10 @@ public class Main {
         }
     }
 
-    private static void generateSummary(String[] command) {
-        if (command.length != 2) {
-            System.out.println("Usage: generate_summary <date_range>");
-            return;
-        }
-
-        String[] dateRange = command[1].split("to");
+    private static void generateSummary(String args) {
+        String[] dateRange = args.split("to");
         if (dateRange.length != 2) {
-            System.out.println("Invalid date range format. Use 'yyyy-MM-dd' or 'yyyy-MM-dd HH:mm'");
+            System.out.println("Invalid date range format. Use 'yyyy-MM-dd'T'HH:mm' to 'yyyy-MM-dd'T'HH:mm'");
             return;
         }
 
@@ -187,9 +183,7 @@ public class Main {
         }
     }
 
-    // Helper method to generate a unique event ID
     private static String generateEventID() {
-        // Implement a unique ID generation logic
         return "ID" + System.currentTimeMillis();
     }
 }
