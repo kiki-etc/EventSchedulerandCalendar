@@ -57,18 +57,22 @@ public class Main {
      * @param args
      */
     private static void createEvent(String args) {
-        String[] parts = args.split(" ");
-        if (parts.length < 6) {
-            System.out.println("Usage: create_event <title> <date> <time> <location> <organization> <description>");
+        // Split the input arguments by spaces, taking care of the quotes around each argument
+        String[] parts = args.split("\"\\s+\"|\"|\\s+");
+    
+        if (parts.length != 6) {
+            System.out.println("Usage: create_event \"<title>\" \"<date>\" \"<time>\" \"<location>\" \"<organization>\" \"<description>\"");
             return;
         }
     
         try {
-            String title = parts[0];
-            LocalDateTime dateTime = LocalDateTime.parse(parts[1] + "T" + parts[2], DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-            String location = parts[3];
-            String organization = parts[4];
-            String description = parts[5];
+            String title = parts[0].replace("\"", "").trim();
+            String dateString = parts[1].replace("\"", "").trim();
+            String timeString = parts[2].replace("\"", "").trim();
+            LocalDateTime dateTime = LocalDateTime.parse(dateString + "T" + timeString, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+            String location = parts[3].replace("\"", "").trim();
+            String organization = parts[4].replace("\"", "").trim();
+            String description = parts[5].replace("\"", "").trim();
             String eventID = generateEventID();
             Event event = new Event(dateTime, title, organization, eventID);
             event.setVenue(location);
@@ -82,7 +86,7 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Error creating event: " + e.getMessage());
         }
-    }    
+    }     
 
     /**
      * Modifies the event based on user input.
