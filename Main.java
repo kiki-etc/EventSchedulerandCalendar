@@ -5,10 +5,19 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The main class for the Event Management Application. 
+ * Provide a command-line interface to manage events, including creating, modifying,
+ * deleting, viewing, searching, sorting and generating summaries of events.
+ */
 public class Main {
     private static EventCollection eventCollection = new EventCollection();
     private static Scanner scanner = new Scanner(System.in);
 
+/**
+ * The entry point of the application
+ * @param args
+ */
     public static void main(String[] args) {
         while (true) {
             System.out.println("\nEnter command:");
@@ -46,6 +55,10 @@ public class Main {
         }
     }
 
+    /**
+     * Creates a new event based on user input
+     * @param command
+     */
     private static void createEvent(String[] command) {
         if (command.length != 5) {
             System.out.println("Usage: create_event <title> <date> <time> <location> <description>");
@@ -71,6 +84,10 @@ public class Main {
         }
     }
 
+    /**
+     * Modifies the event based on user input
+     * @param command
+     */
     private static void modifyEvent(String[] command) {
         if (command.length != 3) {
             System.out.println("Usage: modify_event <event_id> <attribute> <new_value>");
@@ -89,6 +106,10 @@ public class Main {
         }
     }
 
+    /**
+     * Deletes an event based on user input
+     * @param command
+     */
     private static void deleteEvent(String[] command) {
         if (command.length != 2) {
             System.out.println("Usage: delete_event <event_id>");
@@ -104,6 +125,10 @@ public class Main {
         }
     }
 
+    /**
+     * View events based on a specific filter
+     * @param command
+     */
     private static void viewEvents(String[] command) {
         if (command.length != 2) {
             System.out.println("Usage: view_events <filter>");
@@ -129,6 +154,10 @@ public class Main {
         }
     }
 
+    /**
+     * Search for events based on a specified attribute and value
+     * @param command
+     */
     private static void searchEvent(String[] command) {
         if (command.length != 3) {
             System.out.println("Usage: search_event <attribute> <value>");
@@ -152,6 +181,10 @@ public class Main {
         }
     }
 
+    /**
+     * Sort events based on a specific attribute and displays the sorted list
+     * @param command
+     */
     private static void sortEvents(String[] command) {
         if (command.length != 2) {
             System.out.println("Usage: sort_events <attribute>");
@@ -166,6 +199,10 @@ public class Main {
         }
     }
 
+    /**
+     * Generates a summary based on a specific attribute
+     * @param command
+     */
     private static void generateSummary(String[] command) {
         if (command.length != 2) {
             System.out.println("Usage: generate_summary <date_range>");
@@ -187,7 +224,10 @@ public class Main {
         }
     }
 
-    // Helper method to generate a unique event ID
+    /**
+     * Helper method to generate a unique event ID
+     * @return unique EventID
+    */ 
     private static String generateEventID() {
         // Implement a unique ID generation logic
         return "ID" + System.currentTimeMillis();
