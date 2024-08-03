@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 /**
  * The main class for the Event Management Application. 
- * Provide a command-line interface to manage events, including creating, modifying,
- * deleting, viewing, searching, sorting and generating summaries of events.
+ * Provides a command-line interface to manage events, including creating, modifying,
+ * deleting, viewing, searching, sorting, and generating summaries of events.
  */
 public class Main {
     private static EventCollection eventCollection = new EventCollection();
@@ -30,6 +30,9 @@ public class Main {
                     break;
                 case "view_events":
                     viewEvents(command[1]);
+                    break;
+                case "view_all_events":
+                    viewAllEvents();
                     break;
                 case "search_event":
                     searchEvent(command[1]);
@@ -168,6 +171,15 @@ public class Main {
                 break;
             default:
                 System.out.println("Invalid filter. Use 'today', 'week', or 'month'.");
+        }
+    }
+
+    /**
+     * View all events in the collection.
+     */
+    private static void viewAllEvents() {
+        for (Event event : eventCollection.getEvents()) {
+            event.display();
         }
     }
 
