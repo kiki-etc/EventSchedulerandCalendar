@@ -74,6 +74,21 @@ view_events today
 
 ---
 
+#### **4. View All Events**
+**Command:**
+```
+view_all_events
+```
+**Description:**
+Views all events in the collection.
+
+**Example:**
+```
+view_all_ events
+```
+
+---
+
 #### **5. Search for Events**
 **Command:**
 ```
