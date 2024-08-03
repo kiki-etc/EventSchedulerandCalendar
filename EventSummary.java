@@ -30,7 +30,6 @@ public class EventSummary {
 
     /**
      * Generates a summary of the events
-     * @param
     */ 
     private void generateSummary() {
         System.out.println("Total number of events: " + events.size());
