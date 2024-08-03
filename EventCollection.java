@@ -13,10 +13,6 @@ import java.util.Set;
 public class EventCollection {
     private Set<Event> events;
 
-
-    /**
-     * A constructor for an empty set of events
-     */
     public EventCollection() {
         this.events = new HashSet<>();
     }
@@ -24,7 +20,7 @@ public class EventCollection {
     /**
      * Adding an event to the collection
      * @param event
-     * @return adding event
+     * @return whether or not adding event was successful
      */
     public boolean add(Event event) {
         return events.add(event);
@@ -33,8 +29,8 @@ public class EventCollection {
     /**
      * removes an event with the specified eventID
      * 
-     * @param eventID
-     * @return
+     * @param eventID the ID number of the event, as a String
+     * @return whether or not the event was successfully removed
      */
     public boolean remove(String eventID) {
         return events.removeIf(event -> event.id().equals(eventID));
@@ -42,8 +38,8 @@ public class EventCollection {
 
     /**
      * retrieve an event by its ID
-     * @param eventID
-     * @return
+     * @param eventID the ID number of the event, as a String
+     * @return the event with the specified eventID
     */ 
     public Event getEventByID(String eventID) {
         for (Event event : events) {
@@ -56,11 +52,11 @@ public class EventCollection {
 
     /** 
      * modifies an attribute of the specified event
-     * @param eventID
-     * @param attribute
-     * @param newValue
+     * @param eventID the ID number of the event, as a String
+     * @param attribute the attribute of the event to modify, e.g. 'title'
+     * @param newValue the value to update the specified attribute to
      * 
-     * @return true
+     * @return whether or not the modification was successful
      */
     public boolean modifyEvent(String eventID, String attribute, Object newValue) {
         for (Event event : events) {
@@ -92,8 +88,8 @@ public class EventCollection {
 
     /**
      * creates a list and returns the sorted list
-     * @param attribute
-     * @return
+     * @param attribute the attribute of the event to sort by, e.g. 'title'
+     * @return a list of the events, sorted by the specified attribute
     */ 
     public List<Event> sort(String attribute) {
         List<Event> sortedEvents = new ArrayList<>(events);
@@ -128,9 +124,9 @@ public class EventCollection {
 
     /**
      * searches for events based on a specified attribute and value, returns an array of their eventIDs
-     * @param attribute
-     * @param value
-     * @return
+     * @param attribute the attribute of the events we're looking, e.g. 'title'
+     * @param value the value of the specified attribute, e.g. all events with the title 'Anniversary'
+     * @return an array of strings with all the eventIDs of the events that match the search criteria
     */ 
     public String[] search(String attribute, Object value) {
         return events.stream()
@@ -158,8 +154,8 @@ public class EventCollection {
 
     /**
      * Displays events based on a specified filter
-     * @param attribute
-     * @param value
+     * @param attribute the attribute of the events to filter by, e.g. 'title'
+     * @param value the value that the attribute should be equal to
     */ 
     public void view(String attribute, Object value) {
         for (Event event : events) {
@@ -200,9 +196,8 @@ public class EventCollection {
         }
     }
 
-    /**
-     * returns the set of events
-     * @return
+    /** 
+     * @return the set of events
     */ 
     public Set<Event> getEvents() {
         return events;
