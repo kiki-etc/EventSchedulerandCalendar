@@ -1,9 +1,7 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The main class for the Event Management Application. 
@@ -14,37 +12,33 @@ public class Main {
     private static EventCollection eventCollection = new EventCollection();
     private static Scanner scanner = new Scanner(System.in);
 
-/**
- * The entry point of the application
- * @param args
- */
     public static void main(String[] args) {
         while (true) {
             System.out.println("\nEnter command:");
             String input = scanner.nextLine();
-            String[] command = input.split(" ", 3);
+            String[] command = input.split(" ", 2);
 
             switch (command[0].toLowerCase()) {
                 case "create_event":
-                    createEvent(command);
+                    createEvent(command[1]);
                     break;
                 case "modify_event":
-                    modifyEvent(command);
+                    modifyEvent(command[1]);
                     break;
                 case "delete_event":
-                    deleteEvent(command);
+                    deleteEvent(command[1]);
                     break;
                 case "view_events":
-                    viewEvents(command);
+                    viewEvents(command[1]);
                     break;
                 case "search_event":
-                    searchEvent(command);
+                    searchEvent(command[1]);
                     break;
                 case "sort_events":
-                    sortEvents(command);
+                    sortEvents(command[1]);
                     break;
                 case "generate_summary":
-                    generateSummary(command);
+                    generateSummary(command[1]);
                     break;
                 case "exit":
                     System.out.println("Exiting...");
@@ -56,23 +50,26 @@ public class Main {
     }
 
     /**
-     * Creates a new event based on user input
-     * @param command
+     * Creates a new event based on user input.
+     * @param args
      */
-    private static void createEvent(String[] command) {
-        if (command.length != 5) {
-            System.out.println("Usage: create_event <title> <date> <time> <location> <description>");
+    private static void createEvent(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 6) {
+            System.out.println("Usage: create_event <title> <date> <time> <location> <organization> <description>");
             return;
         }
 
         try {
-            String title = command[1];
-            LocalDateTime dateTime = LocalDateTime.parse(command[2] + "T" + command[3], DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-            String organization = "Unknown"; // Default or specify how to get this
-            String eventID = generateEventID(); // Implement this method to generate a unique event ID
+            String title = parts[0];
+            LocalDateTime dateTime = LocalDateTime.parse(parts[1] + "T" + parts[2], DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+            String location = parts[3];
+            String organization = parts[4];
+            String description = parts[5];
+            String eventID = generateEventID();
             Event event = new Event(dateTime, title, organization, eventID);
-            event.setVenue(command[4]); // Use this for location
-            event.setDescription(command[5]); // Use this for description
+            event.setVenue(location);
+            event.setDescription(description);
 
             if (eventCollection.add(event)) {
                 System.out.println("Event created successfully.");
@@ -85,38 +82,57 @@ public class Main {
     }
 
     /**
-     * Modifies the event based on user input
-     * @param command
+     * Modifies the event based on user input.
+     * @param args
      */
-    private static void modifyEvent(String[] command) {
-        if (command.length != 3) {
+    private static void modifyEvent(String args) {
+        String[] parts = args.split(" ", 3);
+        if (parts.length != 3) {
             System.out.println("Usage: modify_event <event_id> <attribute> <new_value>");
             return;
         }
 
-        String eventID = command[1];
-        String attribute = command[2];
-        String newValue = command[3];
+        String eventID = parts[0];
+        String attribute = parts[1];
+        String newValue = parts[2];
 
-        boolean result = eventCollection.modifyEvent(eventID, attribute, newValue);
-        if (result) {
-            System.out.println("Event modified successfully.");
-        } else {
-            System.out.println("Failed to modify event. Check the event ID or attribute.");
+        try {
+            Object value;
+            switch (attribute.toLowerCase()) {
+                case "datetime":
+                    value = LocalDateTime.parse(newValue, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                    break;
+                case "priority":
+                    value = Boolean.parseBoolean(newValue);
+                    break;
+                default:
+                    value = newValue;
+                    break;
+            }
+
+            boolean result = eventCollection.modifyEvent(eventID, attribute, value);
+            if (result) {
+                System.out.println("Event modified successfully.");
+            } else {
+                System.out.println("Failed to modify event. Check the event ID or attribute.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error modifying event: " + e.getMessage());
         }
     }
 
     /**
-     * Deletes an event based on user input
-     * @param command
+     * Deletes an event based on user input.
+     * @param args
      */
-    private static void deleteEvent(String[] command) {
-        if (command.length != 2) {
+    private static void deleteEvent(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 1) {
             System.out.println("Usage: delete_event <event_id>");
             return;
         }
 
-        String eventID = command[1];
+        String eventID = parts[0];
         boolean result = eventCollection.remove(eventID);
         if (result) {
             System.out.println("Event deleted successfully.");
@@ -126,16 +142,17 @@ public class Main {
     }
 
     /**
-     * View events based on a specific filter
-     * @param command
+     * View events based on a specific filter.
+     * @param args
      */
-    private static void viewEvents(String[] command) {
-        if (command.length != 2) {
+    private static void viewEvents(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 1) {
             System.out.println("Usage: view_events <filter>");
             return;
         }
 
-        String filter = command[1];
+        String filter = parts[0];
         switch (filter.toLowerCase()) {
             case "today":
                 LocalDateTime now = LocalDateTime.now();
@@ -155,17 +172,18 @@ public class Main {
     }
 
     /**
-     * Search for events based on a specified attribute and value
-     * @param command
+     * Search for events based on a specified attribute and value.
+     * @param args
      */
-    private static void searchEvent(String[] command) {
-        if (command.length != 3) {
+    private static void searchEvent(String args) {
+        String[] parts = args.split(" ", 2);
+        if (parts.length != 2) {
             System.out.println("Usage: search_event <attribute> <value>");
             return;
         }
 
-        String attribute = command[1];
-        String value = command[2];
+        String attribute = parts[0];
+        String value = parts[1];
 
         String[] eventIDs = eventCollection.search(attribute, value);
         if (eventIDs.length > 0) {
@@ -182,16 +200,17 @@ public class Main {
     }
 
     /**
-     * Sort events based on a specific attribute and displays the sorted list
-     * @param command
+     * Sort events based on a specific attribute and displays the sorted list.
+     * @param args
      */
-    private static void sortEvents(String[] command) {
-        if (command.length != 2) {
+    private static void sortEvents(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 1) {
             System.out.println("Usage: sort_events <attribute>");
             return;
         }
 
-        String attribute = command[1];
+        String attribute = parts[0];
         List<Event> sortedEvents = eventCollection.sort(attribute);
         System.out.println("Sorted events:");
         for (Event event : sortedEvents) {
@@ -200,18 +219,13 @@ public class Main {
     }
 
     /**
-     * Generates a summary based on a specific attribute
-     * @param command
+     * Generates a summary based on a specific attribute.
+     * @param args
      */
-    private static void generateSummary(String[] command) {
-        if (command.length != 2) {
-            System.out.println("Usage: generate_summary <date_range>");
-            return;
-        }
-
-        String[] dateRange = command[1].split("to");
+    private static void generateSummary(String args) {
+        String[] dateRange = args.split("to");
         if (dateRange.length != 2) {
-            System.out.println("Invalid date range format. Use 'yyyy-MM-dd' or 'yyyy-MM-dd HH:mm'");
+            System.out.println("Invalid date range format. Use 'yyyy-MM-dd'T'HH:mm' to 'yyyy-MM-dd'T'HH:mm'");
             return;
         }
 
@@ -225,11 +239,10 @@ public class Main {
     }
 
     /**
-     * Helper method to generate a unique event ID
+     * Helper method to generate a unique event ID.
      * @return unique EventID
     */ 
     private static String generateEventID() {
-        // Implement a unique ID generation logic
         return "ID" + System.currentTimeMillis();
     }
 }
