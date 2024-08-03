@@ -173,7 +173,7 @@ public class Event implements Comparable<Event> {
 
     /**
      * Showing a hash code value for the object
-     * @return int
+     * @return integer hashcode
      */
     @Override   // for working with collections like HashMaps etc.
     public int hashCode() {
