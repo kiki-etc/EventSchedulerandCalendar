@@ -17,6 +17,8 @@ public class Main {
             System.out.println("\nEnter command:");
             String input = scanner.nextLine();
             String[] command = input.split(" ", 2);
+            
+            command[1] = transformInput(command[1]);
 
             switch (command[0].toLowerCase()) {
                 case "create_event":
@@ -52,27 +54,38 @@ public class Main {
         }
     }
 
+    private static String transformInput(String input) {
+        // Replace all occurrences of double quotes (") with empty strings
+        String noDoubleQuotes = input.replace("\" \"", ",");
+    
+        // Replace all occurrences of spaces (" ") with commas (,)
+        String result = noDoubleQuotes.replace("\"", "");
+    
+        return result;
+    }
+
     /**
      * Creates a new event based on user input.
      * @param args
      */
     private static void createEvent(String args) {
-        // Split the input arguments by spaces, taking care of the quotes around each argument
-        String[] parts = args.split("\"\\s+\"|\"|\\s+");
-    
+        // Use a regular expression to split the input string by quotes, taking care of spaces and quotes
+        String[] parts = args.split(",");
+        
+        // Check if the parts length is correct (should be 6 elements due to splitting by quotes)
         if (parts.length != 6) {
             System.out.println("Usage: create_event \"<title>\" \"<date>\" \"<time>\" \"<location>\" \"<organization>\" \"<description>\"");
             return;
         }
     
         try {
-            String title = parts[0].replace("\"", "").trim();
-            String dateString = parts[1].replace("\"", "").trim();
-            String timeString = parts[2].replace("\"", "").trim();
+            String title = parts[0].trim();
+            String dateString = parts[1].trim();
+            String timeString = parts[2].trim();
             LocalDateTime dateTime = LocalDateTime.parse(dateString + "T" + timeString, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-            String location = parts[3].replace("\"", "").trim();
-            String organization = parts[4].replace("\"", "").trim();
-            String description = parts[5].replace("\"", "").trim();
+            String location = parts[3].trim();
+            String organization = parts[4].trim();
+            String description = parts[5].trim();
             String eventID = generateEventID();
             Event event = new Event(dateTime, title, organization, eventID);
             event.setVenue(location);
@@ -83,17 +96,19 @@ public class Main {
             } else {
                 System.out.println("Event with this ID already exists.");
             }
+    
+            System.out.println("Current number of events: " + eventCollection.getEvents().size()); // Verify event count
         } catch (Exception e) {
             System.out.println("Error creating event: " + e.getMessage());
         }
-    }     
+    }
 
     /**
      * Modifies the event based on user input.
      * @param args
      */
     private static void modifyEvent(String args) {
-        String[] parts = args.split(" ", 3);
+        String[] parts = args.split(",", 3);
         if (parts.length != 3) {
             System.out.println("Usage: modify_event <event_id> <attribute> <new_value>");
             return;
