@@ -37,43 +37,43 @@ public class Event implements Comparable<Event> {
      * The title of the event
      * @return title
     */
-    public String        getTitle()        {return title;}
+    public String getTitle() {return title;}
 
     /**
      * the date and time of the event
      * @return date and time
      */
-    public LocalDateTime getDateTime()     {return dateTime;}
+    public LocalDateTime getDateTime() {return dateTime;}
 
     /**
      * the venue of the event
      * @return venue
      */
-    public String        getVenue()        {return venue;}
+    public String getVenue() {return venue;}
 
     /**
      * the organization planning the event
      * @return organizaiton
      */
-    public String        getOrganization() {return organization;}
+    public String getOrganization() {return organization;}
 
     /**
      * the priority status of the event
      * @return true if the event is high priority, false otherwise
      */
-    public boolean       isHighPriority()  {return highPriority;}
+    public boolean isHighPriority() {return highPriority;}
 
     /**
      * the description of the event
      * @return description
      */
-    public String        getDescription()  {return description;}
+    public String getDescription() {return description;}
 
     /**
      * the ID of the event
      * @return eventID
      */
-    public String        id()              {return eventID;}
+    public String id() {return eventID;}
 
     // mutator methods
 
@@ -81,7 +81,7 @@ public class Event implements Comparable<Event> {
      * setting the title of the event
      * @param title
      */
-    public void setTitle(String title)              {this.title = title;}
+    public void setTitle(String title) {this.title = title;}
 
     /**
      * setting the date and time of the event
@@ -93,25 +93,25 @@ public class Event implements Comparable<Event> {
      * toggling  the  priority status of the event
      * @param
      */
-    public void togglePriority()                    {highPriority = !highPriority;}
+    public void togglePriority() {highPriority = !highPriority;}
 
     /**
      * setting the venue of the event
      * @param venue
      */
-    public void setVenue(String venue)              {this.venue = venue;}
+    public void setVenue(String venue) {this.venue = venue;}
 
     /**
      * setting the description of the event
      * @param description
      */
-    public void setDescription(String description)  {this.description = description;}
+    public void setDescription(String description) {this.description = description;}
 
     /**
      * setting the priority of the event
      * @param highPriority
      */
-    public void setPriority(boolean highPriority)   {this.highPriority = highPriority;}
+    public void setPriority(boolean highPriority) {this.highPriority = highPriority;}
 
     // return event details as a comprehensive String
     public void display() {
@@ -124,8 +124,9 @@ public class Event implements Comparable<Event> {
                 "Venue: %s%n" +
                 "Date and Time: %s%n" +
               "\nDescription: %s%n" +
-                "Priority: %s",
-                title, organization, venue, formattedDateTime, description, highPriority ? "High" : "Normal"
+                "Priority: %s" +
+                "\nEventID: %s%n",
+                title, organization, venue, formattedDateTime, description, highPriority ? "High" : "Normal", eventID
         );
         
         System.out.println(output);
