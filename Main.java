@@ -1,7 +1,7 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * The main class for the Event Management Application. 
@@ -50,12 +50,13 @@ public class Main {
     }
 
     /**
-     * Creates a new event based on user input
-     * @param command
+     * Creates a new event based on user input.
+     * @param args
      */
-    private static void createEvent(String[] command) {
-        if (command.length != 5) {
-            System.out.println("Usage: create_event <title> <date> <time> <location> <description>");
+    private static void createEvent(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 6) {
+            System.out.println("Usage: create_event <title> <date> <time> <location> <organization> <description>");
             return;
         }
 
@@ -81,11 +82,12 @@ public class Main {
     }
 
     /**
-     * Modifies the event based on user input
-     * @param command
+     * Modifies the event based on user input.
+     * @param args
      */
-    private static void modifyEvent(String[] command) {
-        if (command.length != 3) {
+    private static void modifyEvent(String args) {
+        String[] parts = args.split(" ", 3);
+        if (parts.length != 3) {
             System.out.println("Usage: modify_event <event_id> <attribute> <new_value>");
             return;
         }
@@ -120,16 +122,17 @@ public class Main {
     }
 
     /**
-     * Deletes an event based on user input
-     * @param command
+     * Deletes an event based on user input.
+     * @param args
      */
-    private static void deleteEvent(String[] command) {
-        if (command.length != 2) {
+    private static void deleteEvent(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 1) {
             System.out.println("Usage: delete_event <event_id>");
             return;
         }
 
-        String eventID = command[1];
+        String eventID = parts[0];
         boolean result = eventCollection.remove(eventID);
         if (result) {
             System.out.println("Event deleted successfully.");
@@ -139,16 +142,17 @@ public class Main {
     }
 
     /**
-     * View events based on a specific filter
-     * @param command
+     * View events based on a specific filter.
+     * @param args
      */
-    private static void viewEvents(String[] command) {
-        if (command.length != 2) {
+    private static void viewEvents(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 1) {
             System.out.println("Usage: view_events <filter>");
             return;
         }
 
-        String filter = command[1];
+        String filter = parts[0];
         switch (filter.toLowerCase()) {
             case "today":
                 LocalDateTime now = LocalDateTime.now();
@@ -168,11 +172,12 @@ public class Main {
     }
 
     /**
-     * Search for events based on a specified attribute and value
-     * @param command
+     * Search for events based on a specified attribute and value.
+     * @param args
      */
-    private static void searchEvent(String[] command) {
-        if (command.length != 3) {
+    private static void searchEvent(String args) {
+        String[] parts = args.split(" ", 2);
+        if (parts.length != 2) {
             System.out.println("Usage: search_event <attribute> <value>");
             return;
         }
@@ -195,16 +200,17 @@ public class Main {
     }
 
     /**
-     * Sort events based on a specific attribute and displays the sorted list
-     * @param command
+     * Sort events based on a specific attribute and displays the sorted list.
+     * @param args
      */
-    private static void sortEvents(String[] command) {
-        if (command.length != 2) {
+    private static void sortEvents(String args) {
+        String[] parts = args.split(" ");
+        if (parts.length != 1) {
             System.out.println("Usage: sort_events <attribute>");
             return;
         }
 
-        String attribute = command[1];
+        String attribute = parts[0];
         List<Event> sortedEvents = eventCollection.sort(attribute);
         System.out.println("Sorted events:");
         for (Event event : sortedEvents) {
@@ -213,16 +219,11 @@ public class Main {
     }
 
     /**
-     * Generates a summary based on a specific attribute
-     * @param command
+     * Generates a summary based on a specific attribute.
+     * @param args
      */
-    private static void generateSummary(String[] command) {
-        if (command.length != 2) {
-            System.out.println("Usage: generate_summary <date_range>");
-            return;
-        }
-
-        String[] dateRange = command[1].split("to");
+    private static void generateSummary(String args) {
+        String[] dateRange = args.split("to");
         if (dateRange.length != 2) {
             System.out.println("Invalid date range format. Use 'yyyy-MM-dd'T'HH:mm' to 'yyyy-MM-dd'T'HH:mm'");
             return;
@@ -238,7 +239,7 @@ public class Main {
     }
 
     /**
-     * Helper method to generate a unique event ID
+     * Helper method to generate a unique event ID.
      * @return unique EventID
     */ 
     private static String generateEventID() {
