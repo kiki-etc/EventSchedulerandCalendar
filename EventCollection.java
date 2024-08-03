@@ -21,17 +21,30 @@ public class EventCollection {
         this.events = new HashSet<>();
     }
 
-    // adds an event to the collection
+    /**
+     * Adding an event to the collection
+     * @param event
+     * @return adding event
+     */
     public boolean add(Event event) {
         return events.add(event);
     }
 
-    // removes an event with the specified eventID
+    /**
+     * removes an event with the specified eventID
+     * 
+     * @param eventID
+     * @return
+     */
     public boolean remove(String eventID) {
         return events.removeIf(event -> event.id().equals(eventID));
     }
 
-    // retrieve an event by its ID
+    /**
+     * retrieve an event by its ID
+     * @param eventID
+     * @return
+    */ 
     public Event getEventByID(String eventID) {
         for (Event event : events) {
             if (event.id().equals(eventID)) {
@@ -41,7 +54,14 @@ public class EventCollection {
         return null; // event not found
     }
 
-    // modifies an attribute of the specified event
+    /** 
+     * modifies an attribute of the specified event
+     * @param eventID
+     * @param attribute
+     * @param newValue
+     * 
+     * @return true
+     */
     public boolean modifyEvent(String eventID, String attribute, Object newValue) {
         for (Event event : events) {
             if (event.id().equals(eventID)) {
@@ -70,7 +90,11 @@ public class EventCollection {
         return false; // event not found
     }
 
-    // creates a list and returns the sorted list
+    /**
+     * creates a list and returns the sorted list
+     * @param attribute
+     * @return
+    */ 
     public List<Event> sort(String attribute) {
         List<Event> sortedEvents = new ArrayList<>(events);
         Comparator<Event> comparator;
@@ -102,7 +126,12 @@ public class EventCollection {
         return sortedEvents;
     }
 
-    // searches for events based on a specified attribute and value, returns an array of their eventIDs
+    /**
+     * searches for events based on a specified attribute and value, returns an array of their eventIDs
+     * @param attribute
+     * @param value
+     * @return
+    */ 
     public String[] search(String attribute, Object value) {
         return events.stream()
                 .filter(event -> {
@@ -127,7 +156,11 @@ public class EventCollection {
                 .toArray(String[]::new);
     }
 
-    // Displays events based on a specified filter
+    /**
+     * Displays events based on a specified filter
+     * @param attribute
+     * @param value
+    */ 
     public void view(String attribute, Object value) {
         for (Event event : events) {
             switch (attribute.toLowerCase()) {
@@ -167,7 +200,10 @@ public class EventCollection {
         }
     }
 
-    // returns the set of events
+    /**
+     * returns the set of events
+     * @return
+    */ 
     public Set<Event> getEvents() {
         return events;
     }

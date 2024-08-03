@@ -6,13 +6,21 @@ import java.util.stream.Collectors;
 public class EventSummary {
     private Set<Event> events;
 
-    // Constructor that takes an EventCollection
+    /**
+     * Constructor that takes an EventCollection
+     * @param eventCollection
+    */ 
     public EventSummary(EventCollection eventCollection) {
         this.events = eventCollection.getEvents();
         generateSummary();
     }
 
-    // Constructor that takes an EventCollection and two dates
+    /**
+     * Constructor that takes an EventCollection and two dates
+     * @param eventCollection
+     * @param start
+     * @param end
+    */ 
     public EventSummary(EventCollection eventCollection, LocalDateTime start, LocalDateTime end) {
         this.events = eventCollection.getEvents().stream()
                 .filter(event -> !event.getDateTime().isBefore(start) && !event.getDateTime().isAfter(end))
@@ -20,7 +28,10 @@ public class EventSummary {
         generateSummary();
     }
 
-    // Generates a summary of the events
+    /**
+     * Generates a summary of the events
+     * @param
+    */ 
     private void generateSummary() {
         System.out.println("Total number of events: " + events.size());
 
