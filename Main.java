@@ -17,8 +17,8 @@ public class Main {
             System.out.println("\nEnter command:");
             String input = scanner.nextLine();
             String[] command = input.split(" ", 2);
-            
-            command[1] = transformInput(command[1]);
+
+            if(command.length == 2) command[1] = transformInput(command[1]);
 
             switch (command[0].toLowerCase()) {
                 case "create_event":
@@ -148,7 +148,7 @@ public class Main {
      * @param args
      */
     private static void deleteEvent(String args) {
-        String[] parts = args.split(" ");
+        String[] parts = args.split(",");
         if (parts.length != 1) {
             System.out.println("Usage: delete_event <event_id>");
             return;
@@ -168,7 +168,7 @@ public class Main {
      * @param args
      */
     private static void viewEvents(String args) {
-        String[] parts = args.split(" ");
+        String[] parts = args.split(",");
         if (parts.length != 1) {
             System.out.println("Usage: view_events <filter>");
             return;
@@ -211,7 +211,7 @@ public class Main {
      * @param args
      */
     private static void searchEvent(String args) {
-        String[] parts = args.split(" ", 2);
+        String[] parts = args.split(",", 2);
         if (parts.length != 2) {
             System.out.println("Usage: search_event <attribute> <value>");
             return;
@@ -239,7 +239,7 @@ public class Main {
      * @param args
      */
     private static void sortEvents(String args) {
-        String[] parts = args.split(" ");
+        String[] parts = args.split(",");
         if (parts.length != 1) {
             System.out.println("Usage: sort_events <attribute>");
             return;

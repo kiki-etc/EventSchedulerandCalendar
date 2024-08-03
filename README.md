@@ -34,7 +34,7 @@ Modifies an attribute of an existing event with the new value.
 
 **Example:**
 ```
-modify_event ID123 title "Updated Meeting"
+modify_event ID123 "title" "Updated Meeting"
 ```
 - **`<event_id>`**: The unique ID of the event you want to modify.
 - **`<attribute>`**: The attribute to change (e.g., `title`, `datetime`, `venue`, `description`, `priority`).
@@ -99,7 +99,7 @@ Searches for events based on a specified attribute and value.
 
 **Example:**
 ```
-search_event title "Annual Meeting"
+search_event "title" "Annual Meeting"
 ```
 - **`<attribute>`**: The attribute to search by (e.g., `title`, `datetime`, `venue`, `description`, `priority`, `organization`).
 - **`<value>`**: The value to search for.
